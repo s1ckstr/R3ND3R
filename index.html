@@ -103,7 +103,8 @@
 <div class="container">
     <section id="intro">
         <h2>Overview</h2>
-        <p>R3ND3R is a library built to bypass standard <code>cout</code> bottlenecks by writing directly to the Windows console buffer. It supports dynamic terminal resizing, 24-bit RGB Truecolor via ANSI escape codes, Z-buffering for depth calculation, and custom font scaling for high-resolution ASCII rendering.</p>
+        <p>R3ND3R is a library built to bypass standard <code>cout</code> bottlenecks by writing directly to the Windows console buffer. It supports dynamic terminal resizing, 24-bit RGB Truecolor via ANSI escape codes, Z-buffering for depth calculation, and custom font scaling for high-resolution ASCII rendering. A render engine that renders things only with ASCII characters. This project is supposed to be a joke but ended up like a serious project.
+</p>
     </section>
 
     <section id="installation">
@@ -160,7 +161,7 @@ engine.DrawPixel(x, y, z_depth, ascii_char, r, g, b);</code></pre>
         <h2>Included Demo</h2>
         
         <h3>dizzycube.exe</h3>
-        <p>A standalone 3D demo program that proves out the engine's capabilities. It demonstrates mathematical projection, rotation matrices, Z-buffered depth shading, and how to hook into the API.</p>
+        <p>A demo program that shows a cube spinning with fading depth. what if it were you. Would you be dizzy?</p>
         <p><strong>Compile:</strong></p>
         <pre><code>g++ dizzycube.cpp -o dizzycube.exe -O3</code></pre>
         <p><strong>Run:</strong></p>
