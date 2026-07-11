@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>R3ND3R Engine Docs</title>
+    <style>
+        :root {
+            --bg: #121212;
+            --text: #e0e0e0;
+            --accent: #00ffcc;
+            --surface: #1e1e1e;
+            --code-bg: #2d2d2d;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: var(--surface);
+            padding: 2rem;
+            text-align: center;
+            border-bottom: 2px solid var(--accent);
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        h2 {
+            color: var(--accent);
+            border-bottom: 1px solid #333;
+            padding-bottom: 0.5rem;
+            margin-top: 2rem;
+        }
+
+        h3 {
+            color: #fff;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        code {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: var(--code-bg);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            color: #ff9d00;
+        }
+
+        pre {
+            background-color: var(--code-bg);
+            padding: 1rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            border: 1px solid #444;
+        }
+
+        pre code {
+            background-color: transparent;
+            padding: 0;
+            color: #a9b7c6;
+        }
+
+        .note {
+            background-color: rgba(0, 255, 204, 0.1);
+            border-left: 4px solid var(--accent);
+            padding: 1rem;
+            margin: 1.5rem 0;
+            border-radius: 0 4px 4px 0;
+        }
+
+        ul {
+            padding-left: 1.5rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>R3ND3R</h1>
+    <p>A high-performance, truecolor ASCII rendering engine for Windows terminals.</p>
+</header>
+
+<div class="container">
+    <section id="intro">
+        <h2>Overview</h2>
+        <p>R3ND3R is a library built to bypass standard <code>cout</code> bottlenecks by writing directly to the Windows console buffer. It supports dynamic terminal resizing, 24-bit RGB Truecolor via ANSI escape codes, Z-buffering for depth calculation, and custom font scaling for high-resolution ASCII rendering.</p>
+    </section>
+
+    <section id="installation">
+        <h2>Dependencies & Installation</h2>
+        <p>This engine is built natively for the MSYS2 MinGW/UCRT64 environment. No external libraries are required for the core engine.</p>
+        
+        <h3>1. Setup</h3>
+        <p>Ensure you have MSYS2 installed. Run the <strong>UCRT64</strong> or <strong>MinGW64</strong> terminal. Drop <code>R3ND3R.h</code> into your project directory.</p>
+    </section>
+
+    <section id="developer-guide">
+        <h2>Developer Integration Guide</h2>
+        <p>To use R3ND3R in your own C++ application, you just need to include the header and instantiate the engine.</p>
+
+        <h3>1. Engine Initialization & Resolution</h3>
+        <p>The engine can run at the user's default terminal font size, or you can force a custom high-resolution mode by passing a target pixel height to the constructor.</p>
+        <pre><code>#include "R3ND3R.h"
+using namespace R3ND3R;
+
+// Standard initialization (uses terminal's default font size)
+Engine engine;
+
+// High-res initialization (forces terminal font height to 8 pixels)
+Engine highResEngine(8); </code></pre>
+
+        <h3>2. The Render Loop</h3>
+        <p>A standard rendering loop consists of three steps: clearing the buffer, pushing your draw calls, and displaying the frame.</p>
+        <pre><code>while (true) {
+    // 1. Clear the screen and reset the Z-buffer to infinity
+    engine.Clear();
+
+    // 2. Perform your draw calls
+    // engine.DrawPixel(...)
+
+    // 3. Blast the buffer to the terminal using ANSI escape codes
+    engine.Display();
+}</code></pre>
+
+        <h3>3. Drawing Pixels & Using the Z-Buffer</h3>
+        <p>The engine handles depth sorting automatically. You just provide the X, Y, Z coordinates, the ASCII character, and the RGB values (0-255).</p>
+        <pre><code>int x = 50;
+int y = 20;
+float z_depth = 2.5f; // Lower Z means closer to the camera
+char ascii_char = '#';
+int r = 255, g = 0, b = 0; // Solid red
+
+engine.DrawPixel(x, y, z_depth, ascii_char, r, g, b);</code></pre>
+        <div class="note">
+            <strong>Note:</strong> If you draw two pixels at the exact same X and Y coordinates, the engine will only render the one with the lower <code>z_depth</code> value. This prevents background objects from bleeding through foreground objects.
+        </div>
+    </section>
+
+    <section id="tools">
+        <h2>Included Demo</h2>
+        
+        <h3>dizzycube.exe</h3>
+        <p>A standalone 3D demo program that proves out the engine's capabilities. It demonstrates mathematical projection, rotation matrices, Z-buffered depth shading, and how to hook into the API.</p>
+        <p><strong>Compile:</strong></p>
+        <pre><code>g++ dizzycube.cpp -o dizzycube.exe -O3</code></pre>
+        <p><strong>Run:</strong></p>
+        <pre><code>./dizzycube.exe</code></pre>
+    </section>
+</div>
+
+</body>
+</html>
